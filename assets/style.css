@@ -1,0 +1,30 @@
+body{
+    background-color: #000;
+}
+
+a {
+    text-decoration: none;
+    color: RGB(135, 19, 40);
+}
+
+.close:hover{
+    cursor: pointer;
+}
+
+.button{
+    border: 2px solid #bad4ed;
+    border-radius: 5px;
+}
+
+@keyframes pulse{
+    from{
+        box-shadow: 
+            0 0 25px #fff,
+            0 0 50px #bad4ed;
+    }
+}
+
+.button:focus{
+    animation:
+        pulse 0.5s ease-in-out;
+}

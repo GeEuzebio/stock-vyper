@@ -20,7 +20,8 @@ a {
     from{
         box-shadow: 
             0 0 25px #fff,
-            0 0 50px #bad4ed;
+            0 0 50px #bad4ed,
+            0 0 75px #b0d5f8;
     }
 }
 

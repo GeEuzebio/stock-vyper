@@ -1,6 +1,8 @@
-from dash import Dash, html, dcc, Input, Output, State
+from dash import Dash, html, dcc, Input, Output, State, dash_table
 import dash_bootstrap_components as dbc
 from dash_bootstrap_components.themes import CYBORG
+import pandas as pd
+import yfinance as yf
 
 
 app = Dash(__name__, 
@@ -26,7 +28,25 @@ app.layout = dbc.Row(
                                   'align-items':'center'})
 )
 
+@app.callback(
+        Output('grade', 'children'),
+        Input('input-ativo',  'value')
+)
 
+def get_info(value):
+    if not value:
+        return html.Div("Por favor, digite um ativo válido na caixa de pesquisa.")
+    try:
+        data = yf.download(value)[["Open", "High", "Low", "Close"]]
+        df = pd.DataFrame(data, columns=["Open", "High", "Low", "Close"])
+        table = dash_table.DataTable(columns=[{'name': 'Open', 'id':'Open'},
+                                             {'name': 'High', 'id':'High'},
+                                             {'name': 'Low', 'id':'Low'},
+                                             {'name': 'Close', 'id':'Close'},],
+                                             data=df.to_dict('records'))
+        return table
+    except:
+        return html.Div("Desculpe, não foi possível encontrar informações para o ativo inserido. Por favor, tente novamente com um ativo válido.")
 
 if __name__ == '__main__':
     app.run_server(debug=True)

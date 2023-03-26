@@ -35,8 +35,12 @@ app.layout = dbc.Row(
 
 @app.callback(
     [Output('login-popup', 'children'),
-     Output('body', 'style')],
-    Input('entre', 'n_clicks')
+     Output('vyper-img', 'style',
+    allow_duplicate=True),
+     Output('entre', 'style',
+    allow_duplicate=True)],
+    Input('entre', 'n_clicks'),
+    prevent_initial_call=True
 )
 
 def login_popup(n_clicks):
@@ -52,29 +56,28 @@ def login_popup(n_clicks):
                              n_clicks=0,
                              className='close'),
                     html.Div([
-                        html.H3('Acessar Portal', style={'color':'#ed1f34'}),
                         html.Div([
-                            html.P('Usuário', style={'color':'#ed1f34'}),
+                            html.P('Usuário', style={'color':'#fff'}),
                             dcc.Input(id='username',
                                     type='text',
-                                    placeholder='usuário',
+                                    placeholder='Digite o usuário',
                                     autoComplete='username')], style={
                                     'display':'flex',
                                     'flex-direction':'column',
                                     'align-items':'flex-start'
                                     }),
                         html.Div([
-                            html.P('Senha', style={'color':'#ed1f34'}),
+                            html.P('Senha', style={'color':'#fff'}),
                             dcc.Input(id='password',
                                     type='password',
-                                    placeholder='senha',
+                                    placeholder='Digite a senha',
                                     autoComplete='username')], style={
                                     'display':'flex',
                                     'flex-direction':'column',
                                     'align-items':'flex-start'
                                     }),
                         html.Div([
-                            dcc.Link('Esqueci a senha', href='#', style={'color':'#ed1f34'}),
+                            dcc.Link('Esqueci a senha', href='#', style={'color':'#fff'}),
                             html.Button('Login',
                                        id='login-button', 
                                        style={'width':'100px', 
@@ -88,9 +91,6 @@ def login_popup(n_clicks):
                                 'justify-content':'space-around'})],
                             style={'width':'300px', 
                                     'height':'400px', 
-                                    'border':'solid 1px transparent', 
-                                    'border-radius':'5px', 
-                                    'box-shadow':'0 0 25px #ed1f34',
                                     'display':'flex',
                                     'flex-direction':'column',
                                     'align-items':'center',
@@ -98,47 +98,42 @@ def login_popup(n_clicks):
                             id='portal-div')
                 ], style={'position':'absolute',
                           'left':'40.2%',
-                          'top':'100px',
-                          'background-color':'#000'}), {'width':'100vw',
-                      'height':'100vh',
-                      'margin':'auto',
-                      'display':'flex',
-                      'flex-direction':'column',
-                      'align-items':'center',
-                      'justify-content':'space-evenly',
-                      'backdrop-filter':'blur(5px)'}
-    else:
-        return (html.Div(), {'width': '100vw', 
-                             'height': '100vh', 
-                             'margin': 'auto', 
-                             'display': 'flex', 
-                             'flex-direction': 'column', 
-                             'align-items': 'center', 
-                             'justify-content': 
-                             'space-evenly', 
-                             'backdrop-filter': 'blur(5px)'})
+                          'top':'100px'}), {'width':'500px',
+                          'filter':'blur(5px)'}, {'width':'80px', 
+                                  'height':'40px',
+                                  'background-color':'#ed1f34',
+                                  'filter':'blur(5px)'}
+    elif n_clicks == 0:
+        return (html.Div(), {'width':'500px', 'filter':'none'}, {'width':'80px', 
+                                  'height':'40px',
+                                  'background-color':'#ed1f34'})
     
 @app.callback(
     [Output('portal-div', 'style'),
-     Output('close', 'style')],
+     Output('close', 'style'),
+     Output('vyper-img', 'style'),
+     Output('entre', 'style')],
     Input('close', 'n_clicks')
 )
 def close_div(n_clicks):
     if n_clicks > 0:
-        return [{'display': 'none'}, {'display': 'none'}]
+        return [{'display': 'none'}, {'display': 'none'}, {'width':'500px', 'filter':'none'}, {'width':'80px', 
+                                  'height':'40px',
+                                  'background-color':'#ed1f34', 'filter':'none'}]
     else:
         return [{'width':'300px', 
-                 'height':'400px', 
-                 'border':'solid 1px transparent', 
-                 'border-radius':'5px', 
-                 'box-shadow':'0 0 10px red',
+                 'height':'400px',
                  'display':'flex',
                  'flex-direction':'column',
                  'align-items':'center',
                  'justify-content':'space-around'}, 
                 {'position':'relative', 
                                     'left':'280px',
-                                    'top':'25px'}]
+                                    'top':'25px'},
+                      {'width':'500px', 'filter':'blur(5px)'}, {'width':'80px', 
+                                  'height':'40px',
+                                  'background-color':'#ed1f34',
+                                  'filter':'blur(5px)'}]
 
 if __name__ == '__main__':
     app.run_server(debug=True)

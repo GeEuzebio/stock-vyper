@@ -1,7 +1,9 @@
 from dash import Dash, html, dcc, Input, Output, State
 import dash_bootstrap_components as dbc
 from dash_bootstrap_components.themes import CYBORG
+import os
 
+port = int(os.environ.get("PORT", 5000))
 
 app = Dash(__name__, 
            external_stylesheets = [CYBORG, '/assets/style.css'],
@@ -196,4 +198,4 @@ def state_button(n_clicks):
 
 
 if __name__ == '__main__':
-    app.run_server(debug=True)
+    app.run_server(host='0.0.0.0', port=port)

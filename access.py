@@ -187,7 +187,10 @@ app.layout = dbc.Row(
                         ], style={'width':'80%','display':'flex', 
                                   'align-items':'center', 
                                   'justify-content':'space-between', 
-                                  'margin-top':'10px'})
+                                  'margin-top':'15px'}),
+                        html.Div(id='candle-stick', children=[], style={'width':'85%',
+                                                                        'margin-top':'15px',
+                                                                        'border':'solid 0.5px #fff'})
                         ], style={'display':'flex',
                                   'flex-direction':'column',
                                   'align-items':'center'})
@@ -195,7 +198,8 @@ app.layout = dbc.Row(
 
 @app.callback(
         [Output('grade', 'children'),
-         Output('graph', 'children')],
+         Output('graph', 'children'),
+         Output('candle-stick', 'children')],
         [Input('input-ativo',  'value'),
          Input('start', 'value'),
          Input('end', 'value')],
@@ -254,8 +258,20 @@ def get_info(value, start, end):
                'heigh':'450px',
                'border':'solid 0.5px #fff',
                'border-radius':'5px'}
-    )
-        return table, graph
+    ),
+        candle = go.Figure(data=[go.Candlestick(x=df.index, open=df['Open'],
+                                     close=df['Close'],
+                                     high=df['High'],
+                                     low=df['Low'])])
+        candle.update_layout(title='Gráfico Candlestick',
+                  yaxis_title='Preço',
+                  xaxis_rangeslider_visible=False,
+                  plot_bgcolor='black',
+                  paper_bgcolor='black',
+                  xaxis=dict(gridcolor='white'),
+                  yaxis=dict(gridcolor='white'))
+
+        return table, graph, dcc.Graph(figure=candle)
 
 
 if __name__ == '__main__':

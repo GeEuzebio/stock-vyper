@@ -15,9 +15,10 @@ app.layout = dbc.Row(
                 html.Img(src='/assets/img/vyper_logo_1.png', 
                          style={'width':'500px'},
                          id='vyper-img'),
-                html.H1('Stock Vyper', id='vyper-h1', style={'color':'#ed1f34', 
+                html.H3('Stock Vyper', id='vyper-h1', style={'color':'#ed1f34', 
                                               'text-align':'center',
                                               'padding':'0'}),
+                html.H1('Predict the market', className='typing-text'),
                 dbc.Button('Entre', 
                            id='entre',
                            n_clicks=0, 
@@ -25,7 +26,57 @@ app.layout = dbc.Row(
                                   'height':'40px',
                                   'background-color':'#ed1f34'},
                            className = 'button'),
-                html.Div(children=[], id='login-popup')
+                html.Div(children=[], id='login-popup'),
+                html.Div(html.Img(src='/assets/img/shopping-cart.png'), 
+                         style={'width':'60px',
+                                'height':'60px',
+                                'border-radius':'50%',
+                                'background-image':'radial-gradient(farthest-corner,#ed1f34, #000)',
+                                'position':'absolute',
+                                'left':'10px',
+                                'bottom':'140px',
+                                'display':'flex',
+                                'justify-content':'center',
+                                'align-items':'center'}),
+                html.Div(html.Img(src='/assets/img/instagram.png'), 
+                         style={'width':'60px',
+                                'height':'60px',
+                                'border-radius':'50%',
+                                'background-image':'linear-gradient(to bottom, #405de6, #5851db, #833ab4, #c13584, #e1306c, #fd1d1d)',
+                                'position':'absolute',
+                                'left':'10px',
+                                'bottom':'50px',
+                                'display':'flex',
+                                'justify-content':'center',
+                                'align-items':'center'}),
+                html.Div(
+                         [
+                            html.P('Pt', style={'padding':'0'}),
+                            html.Div(html.Div(id='switch',
+                                              style={'border-radius':'50%',
+                                                     'width':'10px',
+                                                     'height':'10px',
+                                                     'background-color':'red',
+                                                     'position':'absolute'},
+                                              className='switch',
+                                              n_clicks=0),
+                                              style={'height':'12px',
+                                                     'margin':'0 10px',
+                                                     'width':'25px',
+                                                     'background-color':'#fff',
+                                                     'border-radius':'20px',
+                                                     'display':'flex',
+                                                     'flex-direction':'column',
+                                                     'justify-content':'center',
+                                                     'box-content':'border-box'}),
+                            html.P('En', style={'padding':'0'})
+                         ],
+                         style={'position':'fixed',
+                                'left':'20px',
+                                'top':'20px',
+                                'display': 'flex',
+                                'align-items':'center'}
+                )
             ], 
             style={'width':'100vw',
                       'height':'100vh',
@@ -194,11 +245,31 @@ def state_button(n_clicks):
                                             'border-radius':'50%'})]
     elif n_clicks==0:
         return [html.P('Login', style={'margin':'auto'}), html.Div()]
-    
+           
+@app.callback(
+    Output('switch', 'style'),
+    Input('switch', 'n_clicks')
+)
 
+def switch(n_clicks):
+    if n_clicks%2==1:
+        return {'border-radius':'50%',
+                'width':'10px',
+                'height':'10px',
+                'background-color':'red',
+                'position':'absolute',
+                'left':'51px'}
+    else:
+        return {'border-radius':'50%',
+                'width':'10px',
+                'height':'10px',
+                'background-color':'red',
+                'position':'absolute',
+                'left':'41px'}
 
 if __name__ == '__main__':
-    app.run_server(host='0.0.0.0', port=port)
+    #app.run_server(host='0.0.0.0', port=port)
+    app.run_server(debug=True)
 
 """from dash import Dash, html, dcc, Input, Output, State, dash_table
 import dash_bootstrap_components as dbc

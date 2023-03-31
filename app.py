@@ -1,15 +1,21 @@
-from dash import Dash, html, dcc, Input, Output, State
+from dash import Dash, html, dcc, Input, Output, State, dash_table
 import dash_bootstrap_components as dbc
 from dash_bootstrap_components.themes import CYBORG
+import pandas as pd
+import yfinance as yf
+import plotly.graph_objects as go
 import os
 
 port = int(os.environ.get("PORT", 5000))
 
-app = Dash(__name__, 
-           external_stylesheets = [CYBORG, '/assets/style.css'],
-           suppress_callback_exceptions=True)
+app = Dash(__name__, external_stylesheets = [CYBORG, '/assets/style.css'], suppress_callback_exceptions=True)
 
-app.layout = dbc.Row(
+app.layout = html.Div([
+    dcc.Location(id='url', refresh=False),
+    html.Div(id='page-content')
+])
+
+login_layout = dbc.Row(
         dbc.Col([
             dbc.Row([
                 html.Img(src='/assets/img/vyper_logo_1.png', 
@@ -138,13 +144,14 @@ def login_popup(n_clicks):
                                     })], style={'display':'flex', 'flex-direction':'column', 'margin-top':'20px'}),
                         html.Div([
                             dcc.Link('Esqueci a senha', href='#', style={'color':'#fff', 'text-stroke':'1px #000'}),
-                            dbc.Button(
+                            dcc.Link(dbc.Button(
                                        children=[],
                                        id='login-button', 
                                        style={
                                               'background-color':'#ed1f34'},
                                        className = 'login-button',
                                        n_clicks=0),
+                                       href='/index'),
                          ], 
                          style={'width':'100%',
                                 'display':'flex', 
@@ -266,24 +273,8 @@ def switch(n_clicks):
                 'background-color':'red',
                 'position':'absolute',
                 'left':'41px'}
-
-if __name__ == '__main__':
-    app.run_server(host='0.0.0.0', port=port)
-    #app.run_server(debug=True)
-
-"""from dash import Dash, html, dcc, Input, Output, State, dash_table
-import dash_bootstrap_components as dbc
-from dash_bootstrap_components.themes import CYBORG
-import pandas as pd
-import yfinance as yf
-import plotly.graph_objects as go
-
-
-app = Dash(__name__, 
-           external_stylesheets = [dbc.themes.BOOTSTRAP, CYBORG, '/assets/style.css'],
-           suppress_callback_exceptions=True)
-
-app.layout = dbc.Row(
+    
+portal_layout = dbc.Row(
                         dbc.Col([
                                 html.Div([dbc.CardImg(src='/assets/img/vyper_logo_2.png',
                                                       style={'width':'100px'}),
@@ -546,6 +537,14 @@ def get_info(value, start, end):
 
         return table, graph, dcc.Graph(figure=candle)
 
+@app.callback(Output('page-content', 'children'),
+              [Input('url', 'pathname')])
+def display_page(pathname):
+    if pathname == '/':
+        return login_layout
+    elif pathname == '/index':
+        return portal_layout
 
 if __name__ == '__main__':
-    app.run_server(debug=True)"""
+    app.run_server(host='0.0.0.0', port=port)
+    #app.run_server(debug=True)

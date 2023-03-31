@@ -268,8 +268,8 @@ def switch(n_clicks):
                 'left':'41px'}
 
 if __name__ == '__main__':
-    #app.run_server(host='0.0.0.0', port=port)
-    app.run_server(debug=True)
+    app.run_server(host='0.0.0.0', port=port)
+    #app.run_server(debug=True)
 
 """from dash import Dash, html, dcc, Input, Output, State, dash_table
 import dash_bootstrap_components as dbc
